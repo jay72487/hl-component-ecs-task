@@ -224,6 +224,9 @@ CloudFormation do
 
     end
 
+    # add task role name
+    task_role_name = external_parameters.fetch(:task_role_name, nil)
+
     # add docker volumes
     volumes = external_parameters.fetch(:volumes, [])
     volumes.each do |volume|
@@ -286,6 +289,7 @@ CloudFormation do
         AssumeRolePolicyDocument service_assume_role_policy(['ecs-tasks','ssm'])
         Path '/'
         Policies(iam_role_policies(iam_policies))
+        RoleName task_role_name unless task_role_name.nil?
       end
   
       IAM_Role('ExecutionRole') do
